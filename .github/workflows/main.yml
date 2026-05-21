@@ -19,14 +19,25 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Bypass and Force Install Bot
+    - name: Auto Repair package.json
       run: |
-        # ত্রুটিযুক্ত package.json ফাইল পুরোপুরি এড়িয়ে ফ্রেশভাবে প্রজেক্ট সেটআপ করা হচ্ছে
-        rm -f package-lock.json
-        npm init -y
-        npm install express axios dotenv fs-extra chalk request @googlethis/googlethis fluent-ffmpeg qrcode-reader jimp ytdl-core --legacy-peer-deps
-        npm install nayan-apis-server@latest --legacy-peer-deps
-        npm install string-similarity --legacy-peer-deps
+        # Node.js স্ক্রিপ্ট দিয়ে package.json ফাইলের ভুলগুলো নিখুঁতভাবে ফিক্স করা হচ্ছে
+        node -e '
+        const fs = require("fs");
+        const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+        
+        // ভুল এবং ফাঁকা ভার্সনগুলো লেটেস্ট দিয়ে রিপ্লেস করা হলো
+        if(pkg.dependencies) {
+          pkg.dependencies["nayan-apis-server"] = "latest";
+          pkg.dependencies["string-similarity"] = "latest";
+        }
+        
+        fs.writeFileSync("package.json", JSON.stringify(pkg, null, 4), "utf8");
+        console.log("package.json successfully repaired!");
+        '
+
+    - name: Install Dependencies
+      run: npm install --legacy-peer-deps
 
     - name: Start Messenger Bot
-      run: npm run start || node Nayan/catalogs/Nayana.js
+      run: npm run start
