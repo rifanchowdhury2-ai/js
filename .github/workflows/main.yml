@@ -19,9 +19,9 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Force Fix package.json
+    - name: Auto Fix package.json
       run: |
-        # package.json এর ভেতরের ভুল ভার্সন আর ফাঁকা ভার্সন স্ক্রিপ্ট দিয়ে অটো ঠিক করা হচ্ছে
+        # package.json এর ভেতরের ভুল ভার্সনগুলো স্ক্রিপ্ট দিয়ে অটো ঠিক করা হচ্ছে
         sed -i 's/"nayan-apis-server": "^2.4.6"/"nayan-apis-server": "latest"/g' package.json
         sed -i 's/"string-similarity": ""/"string-similarity": "latest"/g' package.json
 
