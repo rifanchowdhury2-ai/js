@@ -19,11 +19,14 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Fix and Install Dependencies
+    - name: Force Fix package.json
       run: |
-        npm install string-similarity --legacy-peer-deps
-        npm install nayan-apis-server@latest --legacy-peer-deps
-        npm install --legacy-peer-deps
+        # package.json এর ভেতরের ভুল ভার্সন আর ফাঁকা ভার্সন স্ক্রিপ্ট দিয়ে অটো ঠিক করা হচ্ছে
+        sed -i 's/"nayan-apis-server": "^2.4.6"/"nayan-apis-server": "latest"/g' package.json
+        sed -i 's/"string-similarity": ""/"string-similarity": "latest"/g' package.json
+
+    - name: Install Dependencies
+      run: npm install --legacy-peer-deps
 
     - name: Start Messenger Bot
       run: npm run start
