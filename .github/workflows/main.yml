@@ -19,14 +19,14 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Auto Fix package.json
+    - name: Bypass and Force Install Bot
       run: |
-        # package.json এর ভেতরের ভুল ভার্সনগুলো স্ক্রিপ্ট দিয়ে অটো ঠিক করা হচ্ছে
-        sed -i 's/"nayan-apis-server": "^2.4.6"/"nayan-apis-server": "latest"/g' package.json
-        sed -i 's/"string-similarity": ""/"string-similarity": "latest"/g' package.json
-
-    - name: Install Dependencies
-      run: npm install --legacy-peer-deps
+        # ত্রুটিযুক্ত package.json ফাইল পুরোপুরি এড়িয়ে ফ্রেশভাবে প্রজেক্ট সেটআপ করা হচ্ছে
+        rm -f package-lock.json
+        npm init -y
+        npm install express axios dotenv fs-extra chalk request @googlethis/googlethis fluent-ffmpeg qrcode-reader jimp ytdl-core --legacy-peer-deps
+        npm install nayan-apis-server@latest --legacy-peer-deps
+        npm install string-similarity --legacy-peer-deps
 
     - name: Start Messenger Bot
-      run: npm run start
+      run: npm run start || node Nayan/catalogs/Nayana.js
