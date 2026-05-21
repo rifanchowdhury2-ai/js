@@ -17,13 +17,13 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-node-version: '20'
+        node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
+    - name: Fix and Install Dependencies
+      run: |
+        npm install string-similarity --legacy-peer-deps
+        npm install nayan-apis-server@latest --legacy-peer-deps
+        npm install --legacy-peer-deps
 
     - name: Start Messenger Bot
-      env:
-        PAGE_ACCESS_TOKEN: ${{ secrets.PAGE_ACCESS_TOKEN }}
-        VERIFY_TOKEN: ${{ secrets.VERIFY_TOKEN }}
-      run: node index.js
+      run: npm run start
